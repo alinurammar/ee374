@@ -1,0 +1,20 @@
+{
+  "name": "konjoNode",
+  "version": "1.0.0",
+  "main": "hello.js",
+  "repository": "https://github.com/alinurammar/ee374",
+  "author": "Ammar Alinur",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "server": "ts-node --project tsconfig.json src/server.ts",
+    "client": "ts-node --project tsconfig.json src/client.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^18.11.18"
+  },
+  "dependencies": {
+    "delay": "^5.0.0",
+    "json-canonicalize": "^1.0.4"
+  }
+}

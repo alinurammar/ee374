@@ -1,0 +1,47 @@
+Arguments: 
+  /Users/ammaralinur/.nvm/versions/node/v16.12.0/bin/node /Users/ammaralinur/.nvm/versions/node/v16.12.0/bin/yarn add -D @types
+
+PATH: 
+  /Users/ammaralinur/gcloud/google-cloud-sdk/bin:/Users/ammaralinur/.yarn/bin:/Users/ammaralinur/.pyenv/shims:/Users/ammaralinur/gcloud/google-cloud-sdk/bin:/Library/TeX/texbin:/Users/ammaralinur/gcloud/google-cloud-sdk/bin:/Library/TeX/texbin:/Users/ammaralinur/opt/anaconda3/bin:/Users/ammaralinur/opt/anaconda3/condabin:/Users/ammaralinur/.nvm/versions/node/v16.12.0/bin:/Users/ammaralinur/gcloud/google-cloud-sdk/bin:/Users/ammaralinur/.pyenv/bin:/Users/ammaralinur/.pyenv/bin:/Library/Frameworks/Python.framework/Versions/3.10/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/homebrew/bin:/Users/ammaralinur/go/bin:/opt/homebrew/opt/go/libexec/bin:/opt/homebrew/bin:/Users/ammaralinur/go/bin:/opt/homebrew/opt/go/libexec/bin:/opt/homebrew/bin:/Users/ammaralinur/go/bin:/opt/homebrew/opt/go/libexec/bin:/opt/homebrew/bin:/Users/ammaralinur/go/bin:/opt/homebrew/opt/go/libexec/bin
+
+Yarn version: 
+  1.22.19
+
+Node version: 
+  16.12.0
+
+Platform: 
+  darwin arm64
+
+Trace: 
+  Error: https://registry.yarnpkg.com/@types: Request "https://registry.yarnpkg.com/@types" returned a 405
+      at Request.params.callback [as _callback] (/Users/ammaralinur/.nvm/versions/node/v16.12.0/lib/node_modules/yarn/lib/cli.js:66154:18)
+      at Request.self.callback (/Users/ammaralinur/.nvm/versions/node/v16.12.0/lib/node_modules/yarn/lib/cli.js:140890:22)
+      at Request.emit (node:events:390:28)
+      at Request.<anonymous> (/Users/ammaralinur/.nvm/versions/node/v16.12.0/lib/node_modules/yarn/lib/cli.js:141862:10)
+      at Request.emit (node:events:390:28)
+      at IncomingMessage.<anonymous> (/Users/ammaralinur/.nvm/versions/node/v16.12.0/lib/node_modules/yarn/lib/cli.js:141784:12)
+      at Object.onceWrapper (node:events:509:28)
+      at IncomingMessage.emit (node:events:402:35)
+      at endReadableNT (node:internal/streams/readable:1343:12)
+      at processTicksAndRejections (node:internal/process/task_queues:83:21)
+
+npm manifest: 
+  {
+    "name": "konjoNode",
+    "version": "1.0.0",
+    "main": "hello.js",
+    "repository": "https://github.com/alinurammar/ee374",
+    "author": "Ammar Alinur",
+    "license": "MIT",
+    "private": true,
+    "scripts": {
+      "hello": "ts-node hello.ts"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
