@@ -1,37 +1,48 @@
 import net from 'net';
 import delay from 'delay';
 import { canonicalize } from 'json-canonicalize';
-
+const HOST = "0.0.0.0";
 const PORT = 18018;
-const HOST = '0.0.0.0';
 const INVALID_FORMAT = 'INVALID_FORMAT';
 const INVALID_HANDSHAKE = 'INVALID_HANDSHAKE';
 const bootstrapPeers = ["45.63.84.226:18018", "45.63.89.228:18018", "144.202.122.8:18018"];
 let discoveredPeers = new Set(bootstrapPeers);
 
-function handleError (error_name: string, msg: string) {
-    return (JSON.stringify({
-        type: "error",
-        data: { name: error_name, nmessage: msg },
-      }) + "\n")
-}
-
-const server = net.createServer((socket) => {
-    const address = `${socket.remoteAddress}:${socket.remotePort}`;
-    console.log(`A new peer has connected: ${address}`);
-    
-    let connectedPeers = new Set([...discoveredPeers]);
-    let pastPeers = new Map<string, Set<string>>();
-    connectedPeers.add(address);
+const client = new net.Socket();
+let connectedPeers = 0
+// try to connect to one of the discovered peers
+// Gaurantee that you are at least connected to one peer in the network - will be stuck here unless connected to at least one peer
+// while (connectedPeers == 0) {
+//     for (const peer of discoveredPeers) {
+//         const [host, port] = peer.split(":");
+//         client.connect(+port, host, () => {
+//           console.log("Connected to peer: " + peer);
+//           connectedPeers++;
+//           initializePeer(client);
+//         });
+//         break;
+//       }
+// }
+function initializePeer(socket: net.Socket) {
     // Send "hello" message on connection
     socket.write(JSON.stringify({ type: 'hello', data: { version: '0.9.0', agent: 'Marabu-Core Client 0.9' } }) + '\n');
     // Send get peers 
     socket.write(JSON.stringify({ type: "getpeers" }) + '\n');
+}
+const server = net.createServer((socket) => {
+    const address = `${socket.remoteAddress}:${socket.remotePort}`;
+    console.log(`A new peer has connected: ${address}`);
+    initializePeer(socket);
+    let connectedPeers = new Set([...discoveredPeers]);
+    let pastPeers = new Map<string, Set<string>>();
+    connectedPeers.add(address);
+    
     
     let isHandshakeComplete = false;
     let buffer = '';
+    // Handle incoming data
     socket.on('data', (data) => {
-        // Handle incoming data - processes data using \n as a delimiter
+        // Processes data using \n as a delimiter
         buffer += data;
         const messages = buffer.split('\n');
         if (messages.length > 1) {
@@ -52,7 +63,6 @@ const server = net.createServer((socket) => {
                 case "hello": 
                     if(isHandshakeComplete) {
                         socket.write(handleError(INVALID_FORMAT, "Already completed handshake."));
-                        socket.end();
                     }
                     else {
                         if(/^0\.9\.[0-9]+$/.test(parsedData.version)) {
@@ -60,7 +70,6 @@ const server = net.createServer((socket) => {
                             console.log(`Peer ${parsedData.data.name} has completed handshake.`);
                         } else {
                             socket.write(handleError(INVALID_FORMAT, "version is not in the correct format"));
-                            socket.end();
                         }
                     }
                 case "getpeers":
@@ -91,9 +100,11 @@ const server = net.createServer((socket) => {
             console.log(`Error: ${err}`)
           }
     });
+    //Handle error messages
     socket.on('error', (error) => {
         console.log(`Client ${address} error: ${error}`);
     });
+    //Handle disconnecting sockets
     socket.on('close', () => {
         pastPeers.delete(`${socket.remoteAddress}:${socket.remotePort}`);
         console.log(`Client: ${address} disconnected`);
@@ -101,16 +112,13 @@ const server = net.createServer((socket) => {
 
     
 });
-server.listen(PORT, () => {
+server.listen(PORT, HOST, () => {
     console.log(`Server listening on port ${PORT}`);
   });
-  const client = new net.Socket();
 
-  // try to connect to one of the discovered peers
-  for (const peer of discoveredPeers) {
-    const [host, port] = peer.split(":");
-    client.connect(+port, host, () => {
-      console.log("Connected to peer: " + peer);
-    });
-    break;
-  }
+function handleError (error_name: string, msg: string) {
+    return (JSON.stringify({
+        type: "error",
+        data: { name: error_name, nmessage: msg },
+    }) + "\n")
+}

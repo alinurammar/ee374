@@ -6,11 +6,11 @@ const SERVER_HOST = '0.0.0.0';
 
 const client = new net.Socket();
 client.connect(SERVER_PORT, SERVER_HOST, async () => {
-    console.log('Connected to server');
+    client.write(JSON.stringify({ type: 'hello', data: { version: '0.9.0', agent: 'Marabu-Core Client 0.9' } }) + '\n');
     await delay(3000);
-    client.write("Hello, server!\n Love,");
+    client.write(JSON.stringify({ type: 'getpeers'}) + '\n');
     await delay(3000);
-    client.write(" Client.\n");
+    client.write(JSON.stringify({ type: 'incorrect code'}) + '\n');
 });
 client.on('data', (data) => {
     console.log(`Server sent: ${data}`);
